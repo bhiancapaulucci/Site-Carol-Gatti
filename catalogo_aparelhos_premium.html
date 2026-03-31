@@ -1,0 +1,366 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#0A0810;--surface:#110F1A;--card:#171422;--border:rgba(180,140,255,0.1);--text:#F0F2F7;--muted:#9A91B0;--accent:#A855F7;--accent2:#7C3AED;--green:#1AC37D;--gold:#F5A623;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.hero{background:linear-gradient(135deg,#0A0810 0%,#1A0F2E 50%,#0A0810 100%);padding:60px 24px 48px;text-align:center;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(168,85,247,0.15) 0%,transparent 70%);pointer-events:none}
+.hero-eyebrow{font-family:'Sora',sans-serif;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+.hero-title{font-family:'Sora',sans-serif;font-size:clamp(28px,5vw,48px);font-weight:700;line-height:1.15;margin-bottom:16px;background:linear-gradient(135deg,#fff 0%,#c4a0f0 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:15px;color:var(--muted);max-width:500px;margin:0 auto 32px;line-height:1.6}
+.toggle-wrap{display:inline-flex;background:var(--surface);border:1px solid var(--border);border-radius:40px;padding:4px;margin-bottom:36px}
+.toggle-btn{padding:10px 28px;border-radius:36px;border:none;cursor:pointer;font-family:'Sora',sans-serif;font-size:13px;font-weight:600;transition:all .25s;background:transparent;color:var(--muted)}
+.toggle-btn.active{background:var(--accent);color:#fff;box-shadow:0 4px 20px rgba(168,85,247,0.4)}
+.trust-row{display:flex;justify-content:center;gap:24px;flex-wrap:wrap}
+.trust-chip{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);background:rgba(255,255,255,0.04);border:1px solid var(--border);padding:6px 14px;border-radius:20px}
+.trust-dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
+
+.filters{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;position:sticky;top:0;z-index:100}
+.filters-inner{max-width:1200px;margin:0 auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.filter-group{display:flex;gap:6px;flex-wrap:wrap}
+.fchip{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;white-space:nowrap}
+.fchip:hover{border-color:rgba(255,255,255,0.2);color:var(--text)}
+.fchip.on{background:var(--accent2);border-color:var(--accent2);color:#fff}
+.search-input{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:20px;padding:6px 14px;color:var(--text);font-size:12px;font-family:'DM Sans',sans-serif;width:160px;outline:none}
+.search-input:focus{border-color:var(--accent)}
+.search-input::placeholder{color:var(--muted)}
+.filter-sep{width:1px;height:20px;background:var(--border)}
+
+.main{max-width:1200px;margin:0 auto;padding:32px 24px}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px}
+.section-title{font-family:'Sora',sans-serif;font-size:18px;font-weight:600}
+.count-badge{font-size:12px;color:var(--muted);background:var(--surface);border:1px solid var(--border);padding:3px 10px;border-radius:12px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+.card:hover{border-color:rgba(168,85,247,0.4);transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,0.4)}
+.card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(168,85,247,0.04) 0%,transparent 60%);opacity:0;transition:.25s}
+.card:hover::before{opacity:1}
+.card-badges{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.badge{font-size:10px;font-weight:600;padding:3px 8px;border-radius:8px;letter-spacing:.5px}
+.b-cat{background:rgba(168,85,247,0.15);color:#c084fc;border:1px solid rgba(168,85,247,0.2)}
+.b-status-v{background:rgba(26,195,125,0.12);color:#1AC37D;border:1px solid rgba(26,195,125,0.2)}
+.b-status-s{background:rgba(245,166,35,0.12);color:#F5A623;border:1px solid rgba(245,166,35,0.2)}
+.b-status-f{background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid var(--border)}
+.b-brand{background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid var(--border)}
+.card-icon{width:48px;height:48px;border-radius:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;font-size:22px;background:rgba(255,255,255,0.05)}
+.card-name{font-family:'Sora',sans-serif;font-size:14px;font-weight:600;margin-bottom:4px;line-height:1.3}
+.card-sub{font-size:11px;color:var(--muted);margin-bottom:16px}
+.card-price-main{font-family:'Sora',sans-serif;font-size:28px;font-weight:700;color:var(--accent);line-height:1}
+.card-price-label{font-size:11px;color:var(--muted);margin-top:2px;margin-bottom:6px}
+.card-price-total{font-size:12px;color:var(--muted)}
+.card-compare{display:flex;gap:12px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.cmp-item{flex:1;font-size:10px;color:var(--muted)}
+.cmp-val{font-size:12px;font-weight:600;color:var(--text);margin-top:2px}
+.card-cta{display:block;width:100%;margin-top:14px;padding:9px;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.25);border-radius:10px;color:var(--accent);font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;text-align:center}
+.card-cta:hover{background:var(--accent);color:#fff}
+
+.empty{text-align:center;padding:80px 24px;color:var(--muted)}
+.empty-icon{font-size:40px;margin-bottom:12px}
+.empty h3{font-family:'Sora',sans-serif;font-size:18px;color:var(--text);margin-bottom:8px}
+
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:1000;align-items:center;justify-content:center;padding:24px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:20px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;padding:28px}
+.modal-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}
+.modal-close{background:rgba(255,255,255,0.06);border:none;color:var(--muted);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:rgba(255,255,255,0.1);color:var(--text)}
+.modal-icon{font-size:36px;margin-bottom:12px}
+.modal-name{font-family:'Sora',sans-serif;font-size:20px;font-weight:700;margin-bottom:6px}
+.modal-meta{font-size:13px;color:var(--muted);margin-bottom:24px}
+.plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.plan-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px}
+.plan-card.highlighted{border-color:var(--accent);background:rgba(168,85,247,0.06)}
+.plan-label{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.plan-price{font-family:'Sora',sans-serif;font-size:24px;font-weight:700;color:var(--accent)}
+.plan-freq{font-size:11px;color:var(--muted);margin-bottom:6px}
+.plan-total{font-size:12px;color:var(--muted)}
+.plan-tip{margin-top:8px;font-size:11px;color:var(--green)}
+.modal-cta{display:block;width:100%;padding:12px;background:var(--accent);border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;transition:all .2s;margin-top:16px}
+.modal-cta:hover{background:#bf6ffe}
+.modal-sec-cta{display:block;width:100%;padding:10px;background:transparent;border:1px solid var(--border);border-radius:12px;color:var(--muted);font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;margin-top:8px;text-align:center}
+.modal-sec-cta:hover{border-color:rgba(255,255,255,0.2);color:var(--text)}
+.info-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px}
+.info-label{color:var(--muted)}
+.tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+
+.cat-section{margin-top:48px}
+.cat-title{font-family:'Sora',sans-serif;font-size:22px;font-weight:700;margin-bottom:4px}
+.cat-desc{font-size:13px;color:var(--muted);margin-bottom:20px}
+
+.results-count{font-size:13px;color:var(--muted);margin-bottom:16px}
+.contact-bar{background:rgba(168,85,247,0.08);border-top:1px solid rgba(168,85,247,0.2);padding:14px 24px;text-align:center}
+.contact-bar a{color:var(--accent);font-family:'Sora',sans-serif;font-size:14px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:.2s}
+.contact-bar a:hover{color:#c084fc}
+.contact-bar span{font-size:12px;color:var(--muted);margin-left:8px}
+</style>
+
+<div class="hero">
+  <div class="hero-eyebrow">Catálogo Corporativo 2025</div>
+  <h1 class="hero-title">Escolha o aparelho ideal<br>para sua empresa</h1>
+  <p class="hero-sub">Smartphones, tablets, relógios e conectividade — com parcelamento em 10x ou 24x.</p>
+  <div class="toggle-wrap">
+    <button class="toggle-btn active" id="t10">Visualizar em 10x</button>
+    <button class="toggle-btn" id="t24">Visualizar em 24x</button>
+  </div>
+  <div class="trust-row">
+    <span class="trust-chip"><span class="trust-dot"></span>5G disponível</span>
+    <span class="trust-chip"><span class="trust-dot"></span>Portfólio vigente</span>
+    <span class="trust-chip"><span class="trust-dot"></span>Parcelamento facilitado</span>
+    <span class="trust-chip"><span class="trust-dot"></span>Linha premium e corporativa</span>
+    <a class="trust-chip" href="https://wa.me/5516996225495" target="_blank" style="text-decoration:none;color:inherit;cursor:pointer"><span class="trust-dot" style="background:#25D366"></span>📲 (16) 99622-5495</a>
+  </div>
+</div>
+
+<div class="contact-bar">
+  <a href="https://wa.me/5516996225495" target="_blank">💬 Falar pelo WhatsApp: (16) 99622-5495</a>
+  <span>· Atendimento consultivo</span>
+</div>
+
+<div class="filters">
+  <div class="filters-inner">
+    <div class="filter-group" id="fg-cat">
+      <button class="fchip on" data-filter="cat" data-val="Todos">Todos</button>
+      <button class="fchip" data-filter="cat" data-val="Smartphone">Smartphones</button>
+      <button class="fchip" data-filter="cat" data-val="Tablet">Tablets</button>
+      <button class="fchip" data-filter="cat" data-val="Relógio">Relógios</button>
+      <button class="fchip" data-filter="cat" data-val="Conectividade">Modems</button>
+    </div>
+    <div class="filter-sep"></div>
+    <div class="filter-group" id="fg-brand">
+      <button class="fchip on" data-filter="brand" data-val="Todas">Marcas</button>
+      <button class="fchip" data-filter="brand" data-val="Apple">Apple</button>
+      <button class="fchip" data-filter="brand" data-val="Samsung">Samsung</button>
+      <button class="fchip" data-filter="brand" data-val="Motorola">Motorola</button>
+    </div>
+    <div class="filter-sep"></div>
+    <input class="search-input" id="search" placeholder="Buscar modelo..." type="text">
+  </div>
+</div>
+
+<div class="main">
+  <div id="grid-wrap">
+    <div class="section-head">
+      <span class="section-title" id="section-label">Todos os aparelhos</span>
+      <span class="count-badge" id="count-badge">0 produtos</span>
+    </div>
+    <div id="results-note" class="results-count"></div>
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="empty" style="display:none">
+      <div class="empty-icon">🔍</div>
+      <h3>Nenhum produto encontrado</h3>
+      <p>Tente ajustar os filtros ou termos de busca</p>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal" id="modal-content">
+    <div class="modal-head">
+      <div></div>
+      <button class="modal-close" id="modal-close">✕</button>
+    </div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+const PRODUCTS = [
+  {id:1,cat:'Smartphone',brand:'Motorola',name:'Moto G06 128GB',storage:'128GB',net:'4G',status:'Portfólio Vigente',p10:76,t10:760,p24:37,t24:888,icon:'📱'},
+  {id:2,cat:'Smartphone',brand:'Motorola',name:'Moto G05 128GB For Business',storage:'128GB',net:'4G',status:'Portfólio Vigente',p10:81,t10:810,p24:39,t24:936,icon:'📱'},
+  {id:3,cat:'Smartphone',brand:'Samsung',name:'Galaxy A06 128GB 5G',storage:'128GB',net:'5G',status:'Portfólio Vigente',p10:82,t10:820,p24:40,t24:960,icon:'📱'},
+  {id:4,cat:'Smartphone',brand:'Motorola',name:'Moto G35 128GB 5G',storage:'128GB',net:'5G',status:'Portfólio Vigente',p10:103,t10:1030,p24:50,t24:1200,icon:'📱'},
+  {id:5,cat:'Smartphone',brand:'Motorola',name:'Moto G35 128GB For Business',storage:'128GB',net:'5G',status:'Portfólio Vigente',p10:110,t10:1100,p24:53,t24:1272,icon:'📱'},
+  {id:6,cat:'Smartphone',brand:'Samsung',name:'Galaxy A17 128GB 5G',storage:'128GB',net:'5G',status:'Portfólio Vigente',p10:133,t10:1330,p24:65,t24:1560,icon:'📱'},
+  {id:7,cat:'Smartphone',brand:'Samsung',name:'Galaxy A17 256GB 5G',storage:'256GB',net:'5G',status:'Portfólio Vigente',p10:151,t10:1510,p24:73,t24:1752,icon:'📱'},
+  {id:8,cat:'Smartphone',brand:'Samsung',name:'Galaxy A36 128GB 5G',storage:'128GB',net:'5G',status:'Portfólio Vigente',p10:156,t10:1560,p24:76,t24:1824,icon:'📱'},
+  {id:9,cat:'Smartphone',brand:'Motorola',name:'Moto G56 256GB For Business',storage:'256GB',net:'5G',status:'Portfólio Vigente',p10:157,t10:1570,p24:76,t24:1824,icon:'📱'},
+  {id:10,cat:'Smartphone',brand:'Samsung',name:'Galaxy A26 256GB 5G',storage:'256GB',net:'5G',status:'Portfólio Vigente',p10:168,t10:1680,p24:82,t24:1968,icon:'📱'},
+  {id:11,cat:'Smartphone',brand:'Motorola',name:'Moto G86 256GB 5G',storage:'256GB',net:'5G',status:'Portfólio Vigente',p10:177,t10:1770,p24:86,t24:2064,icon:'📱'},
+  {id:12,cat:'Smartphone',brand:'Samsung',name:'Galaxy A36 256GB 5G',storage:'256GB',net:'5G',status:'Portfólio Vigente',p10:184,t10:1840,p24:89,t24:2136,icon:'📱'},
+  {id:13,cat:'Smartphone',brand:'Motorola',name:'Edge 60 Fusion 256GB',storage:'256GB',net:'5G',status:'Portfólio Vigente',p10:203,t10:2030,p24:98,t24:2352,icon:'📱'},
+  {id:14,cat:'Smartphone',brand:'Samsung',name:'Galaxy A56 256GB 5G',storage:'256GB',net:'5G',status:'Portfólio Vigente',p10:218,t10:2180,p24:106,t24:2544,icon:'📱'},
+  {id:15,cat:'Smartphone',brand:'Motorola',name:'Edge 60 Pro 256GB',storage:'256GB',net:'5G',status:'Portfólio Vigente',p10:295,t10:2950,p24:143,t24:3432,icon:'📱'},
+  {id:16,cat:'Smartphone',brand:'Samsung',name:'Galaxy S25 FE 256GB',storage:'256GB',net:'5G',status:'Portfólio Vigente',p10:332,t10:3320,p24:160,t24:3840,icon:'📱'},
+  {id:17,cat:'Smartphone',brand:'Samsung',name:'Galaxy S25 256GB',storage:'256GB',net:'5G',status:'Portfólio Vigente',p10:464,t10:4640,p24:224,t24:5376,icon:'📱'},
+  {id:18,cat:'Smartphone',brand:'Apple',name:'iPhone 16e 256GB',storage:'256GB',net:'5G',status:'Portfólio Vigente',p10:473,t10:4730,p24:229,t24:5496,icon:'📱'},
+  {id:19,cat:'Smartphone',brand:'Apple',name:'iPhone 15 256GB',storage:'256GB',net:'5G',status:'Portfólio Vigente',p10:496,t10:4960,p24:240,t24:5760,icon:'📱'},
+  {id:20,cat:'Smartphone',brand:'Samsung',name:'Galaxy S25 Edge 512GB',storage:'512GB',net:'5G',status:'Portfólio Vigente',p10:525,t10:5250,p24:254,t24:6096,icon:'📱'},
+  {id:21,cat:'Smartphone',brand:'Samsung',name:'Galaxy Z Flip 7 256GB',storage:'256GB',net:'5G',status:'Portfólio Vigente',p10:568,t10:5680,p24:275,t24:6600,icon:'📱'},
+  {id:22,cat:'Smartphone',brand:'Apple',name:'iPhone 16 256GB',storage:'256GB',net:'5G',status:'Portfólio Vigente',p10:580,t10:5800,p24:280,t24:6720,icon:'📱'},
+  {id:23,cat:'Smartphone',brand:'Samsung',name:'Galaxy S25 Ultra 256GB',storage:'256GB',net:'5G',status:'Portfólio Vigente',p10:601,t10:6010,p24:291,t24:6984,icon:'📱'},
+  {id:24,cat:'Smartphone',brand:'Apple',name:'iPhone 17 256GB',storage:'256GB',net:'5G',status:'Portfólio Vigente',p10:709,t10:7090,p24:343,t24:8232,icon:'📱'},
+  {id:25,cat:'Smartphone',brand:'Apple',name:'iPhone 17 512GB',storage:'512GB',net:'5G',status:'Portfólio Vigente',p10:839,t10:8390,p24:406,t24:9744,icon:'📱'},
+  {id:26,cat:'Smartphone',brand:'Apple',name:'iPhone Air 256GB',storage:'256GB',net:'5G',status:'Portfólio Vigente',p10:858,t10:8580,p24:415,t24:9960,icon:'📱'},
+  {id:27,cat:'Smartphone',brand:'Samsung',name:'Galaxy Z Fold 7 512GB',storage:'512GB',net:'5G',status:'Portfólio Vigente',p10:950,t10:9500,p24:459,t24:11016,icon:'📱'},
+  {id:28,cat:'Smartphone',brand:'Apple',name:'iPhone 17 Pro 256GB',storage:'256GB',net:'5G',status:'Portfólio Vigente',p10:982,t10:9820,p24:475,t24:11400,icon:'📱'},
+  {id:29,cat:'Smartphone',brand:'Apple',name:'iPhone Air 512GB',storage:'512GB',net:'5G',status:'Portfólio Vigente',p10:1006,t10:10060,p24:486,t24:11664,icon:'📱'},
+  {id:30,cat:'Smartphone',brand:'Apple',name:'iPhone 17 Pro Max 256GB',storage:'256GB',net:'5G',status:'Portfólio Vigente',p10:1099,t10:10990,p24:532,t24:12768,icon:'📱'},
+  {id:31,cat:'Smartphone',brand:'Apple',name:'iPhone 17 Pro 512GB',storage:'512GB',net:'5G',status:'Portfólio Vigente',p10:1139,t10:11390,p24:550,t24:13200,icon:'📱'},
+  {id:32,cat:'Smartphone',brand:'Apple',name:'iPhone 17 Pro 1TB',storage:'1TB',net:'5G',status:'Portfólio Vigente',p10:1259,t10:12590,p24:609,t24:14616,icon:'📱'},
+  {id:33,cat:'Smartphone',brand:'Apple',name:'iPhone 17 Pro Max 1TB',storage:'1TB',net:'5G',status:'Portfólio Vigente',p10:1329,t10:13290,p24:643,t24:15432,icon:'📱'},
+  {id:34,cat:'Smartphone',brand:'Apple',name:'iPhone 17 Pro Max 2TB',storage:'2TB',net:'5G',status:'Portfólio Vigente',p10:1602,t10:16020,p24:774,t24:18576,icon:'📱'},
+  {id:35,cat:'Tablet',brand:'Samsung',name:'Galaxy Tab A11+ 128GB',storage:'128GB',net:'WiFi',status:'Portfólio Vigente',p10:161,t10:1610,p24:78,t24:1872,icon:'💻'},
+  {id:36,cat:'Tablet',brand:'Samsung',name:'Galaxy Tab S10 Lite 128GB',storage:'128GB',net:'WiFi',status:'Portfólio Vigente',p10:253,t10:2530,p24:123,t24:2952,icon:'💻'},
+  {id:37,cat:'Tablet',brand:'Samsung',name:'Galaxy Tab S10 FE 128GB',storage:'128GB',net:'WiFi',status:'Portfólio Vigente',p10:345,t10:3450,p24:167,t24:4008,icon:'💻'},
+  {id:38,cat:'Tablet',brand:'Samsung',name:'Galaxy Tab S10 FE+ 128GB',storage:'128GB',net:'WiFi',status:'Portfólio Vigente',p10:443,t10:4430,p24:214,t24:5136,icon:'💻'},
+  {id:39,cat:'Tablet',brand:'Apple',name:'iPad A16 11" 128GB',storage:'128GB',net:'WiFi',status:'Portfólio Vigente',p10:537,t10:5370,p24:259,t24:6216,icon:'💻'},
+  {id:40,cat:'Tablet',brand:'Apple',name:'iPad A16 11" 256GB',storage:'256GB',net:'WiFi',status:'Portfólio Vigente',p10:637,t10:6370,p24:308,t24:7392,icon:'💻'},
+  {id:41,cat:'Tablet',brand:'Samsung',name:'Galaxy Tab S11 256GB',storage:'256GB',net:'WiFi',status:'Portfólio Vigente',p10:658,t10:6580,p24:318,t24:7632,icon:'💻'},
+  {id:42,cat:'Tablet',brand:'Apple',name:'iPad Air 11" 128GB',storage:'128GB',net:'WiFi',status:'Portfólio Vigente',p10:783,t10:7830,p24:378,t24:9072,icon:'💻'},
+  {id:43,cat:'Tablet',brand:'Apple',name:'iPad Air 11" 256GB',storage:'256GB',net:'WiFi',status:'Portfólio Vigente',p10:878,t10:8780,p24:425,t24:10200,icon:'💻'},
+  {id:44,cat:'Tablet',brand:'Apple',name:'iPad Air 13" 128GB',storage:'128GB',net:'WiFi',status:'Portfólio Vigente',p10:994,t10:9940,p24:481,t24:11544,icon:'💻'},
+  {id:45,cat:'Tablet',brand:'Apple',name:'iPad Air 11" 512GB',storage:'512GB',net:'WiFi',status:'Portfólio Vigente',p10:1085,t10:10850,p24:524,t24:12576,icon:'💻'},
+  {id:46,cat:'Tablet',brand:'Apple',name:'iPad Air 13" 256GB',storage:'256GB',net:'WiFi',status:'Portfólio Vigente',p10:1090,t10:10900,p24:527,t24:12648,icon:'💻'},
+  {id:47,cat:'Tablet',brand:'Apple',name:'iPad Pro M5 13" 256GB',storage:'256GB',net:'WiFi',status:'Portfólio Vigente',p10:1581,t10:15810,p24:764,t24:18336,icon:'💻'},
+  {id:48,cat:'Relógio',brand:'Samsung',name:'Galaxy Watch 8 LTE 40mm',storage:'-',net:'LTE',status:'Portfólio Vigente',p10:230,t10:2300,p24:111,t24:2664,icon:'⌚'},
+  {id:49,cat:'Relógio',brand:'Samsung',name:'Galaxy Watch 8 LTE 44mm',storage:'-',net:'LTE',status:'Portfólio Vigente',p10:254,t10:2540,p24:123,t24:2952,icon:'⌚'},
+  {id:50,cat:'Relógio',brand:'Samsung',name:'Galaxy Watch 8 Classic LTE 46mm',storage:'-',net:'LTE',status:'Portfólio Vigente',p10:304,t10:3040,p24:147,t24:3528,icon:'⌚'},
+  {id:51,cat:'Relógio',brand:'Samsung',name:'Galaxy Watch Ultra LTE 47mm',storage:'-',net:'LTE',status:'Portfólio Vigente',p10:312,t10:3120,p24:151,t24:3624,icon:'⌚'},
+  {id:52,cat:'Relógio',brand:'Apple',name:'Apple Watch Series 11 42mm',storage:'-',net:'LTE',status:'Portfólio Vigente',p10:571,t10:5710,p24:276,t24:6624,icon:'⌚'},
+  {id:53,cat:'Relógio',brand:'Apple',name:'Apple Watch Series 11 46mm',storage:'-',net:'LTE',status:'Portfólio Vigente',p10:606,t10:6060,p24:293,t24:7032,icon:'⌚'},
+  {id:54,cat:'Conectividade',brand:'ZTE',name:'PEN Modem ZTE MF79N',storage:'-',net:'4G',status:'Portfólio Vigente',p10:25,t10:250,p24:12,t24:288,icon:'📡'},
+  {id:55,cat:'Conectividade',brand:'ZTE',name:'Roteador FWA 5G LTE H153-381',storage:'-',net:'5G',status:'Portfólio Vigente',p10:98,t10:980,p24:47,t24:1128,icon:'📡'},
+];
+
+let mode = 10;
+let filterCat = 'Todos';
+let filterBrand = 'Todas';
+let searchQ = '';
+
+const fmt = (n) => 'R$ ' + n.toLocaleString('pt-BR');
+
+function statusBadge(s){
+  if(s==='Portfólio Vigente') return '<span class="badge b-status-v">Vigente</span>';
+  if(s==='Sob Demanda') return '<span class="badge b-status-s">Sob Demanda</span>';
+  return '<span class="badge b-status-f">Fora</span>';
+}
+
+function renderCards(){
+  let filtered = PRODUCTS.filter(p => {
+    if(filterCat !== 'Todos' && p.cat !== filterCat) return false;
+    if(filterBrand !== 'Todas' && p.brand !== filterBrand) return false;
+    if(searchQ && !p.name.toLowerCase().includes(searchQ.toLowerCase())) return false;
+    return true;
+  });
+  const grid = document.getElementById('grid');
+  const empty = document.getElementById('empty');
+  const badge = document.getElementById('count-badge');
+  badge.textContent = filtered.length + ' produto' + (filtered.length !== 1 ? 's' : '');
+  if(!filtered.length){grid.style.display='none';empty.style.display='block';return;}
+  grid.style.display='grid';empty.style.display='none';
+  const parcela = mode === 10 ? 'p10' : 'p24';
+  const total = mode === 10 ? 't10' : 't24';
+  const outros = mode === 10 ? 'p24' : 'p10';
+  const outrosT = mode === 10 ? 't24' : 't10';
+  const outrosL = mode === 10 ? '24x' : '10x';
+  const tipLabel = mode === 10 ? '⚡ Menor valor total' : '✦ Parcela mais leve';
+  grid.innerHTML = filtered.map(p => `
+    <div class="card" data-id="${p.id}">
+      <div class="card-badges">
+        <span class="badge b-cat">${p.cat}</span>
+        <span class="badge b-brand">${p.brand}</span>
+        ${statusBadge(p.status)}
+      </div>
+      <div class="card-icon">${p.icon}</div>
+      <div class="card-name">${p.name}</div>
+      <div class="card-sub">${p.net}${p.storage !== '-' ? ' · ' + p.storage : ''}</div>
+      <div class="card-price-main">${fmt(p[parcela])}</div>
+      <div class="card-price-label">por mês em ${mode}x</div>
+      <div class="card-price-total">Total: ${fmt(p[total])}</div>
+      <div class="card-compare">
+        <div class="cmp-item">
+          <div>Outra opção</div>
+          <div class="cmp-val">${fmt(p[outros])}/mês em ${outrosL}</div>
+        </div>
+        <div class="cmp-item" style="text-align:right;font-size:11px;color:var(--green);padding-top:14px">${tipLabel}</div>
+      </div>
+      <button class="card-cta">Tenho interesse</button>
+    </div>
+  `).join('');
+  grid.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => openModal(+card.dataset.id));
+  });
+}
+
+function openModal(id){
+  const p = PRODUCTS.find(x => x.id === id);
+  if(!p) return;
+  document.getElementById('modal-body').innerHTML = `
+    <div style="font-size:40px;margin-bottom:10px">${p.icon}</div>
+    <div class="modal-name">${p.name}</div>
+    <div class="modal-meta">${p.cat} · ${p.brand} · ${p.net}${p.storage !== '-' ? ' · ' + p.storage : ''}</div>
+    <div class="plan-grid">
+      <div class="plan-card ${mode===10?'highlighted':''}">
+        <div class="plan-label">Até 10x</div>
+        <div class="plan-price">${fmt(p.p10)}</div>
+        <div class="plan-freq">por mês</div>
+        <div class="plan-total">Total: ${fmt(p.t10)}</div>
+        <div class="plan-tip">⚡ Quitação mais rápida</div>
+      </div>
+      <div class="plan-card ${mode===24?'highlighted':''}">
+        <div class="plan-label">Até 24x</div>
+        <div class="plan-price">${fmt(p.p24)}</div>
+        <div class="plan-freq">por mês</div>
+        <div class="plan-total">Total: ${fmt(p.t24)}</div>
+        <div class="plan-tip">✦ Menor impacto mensal</div>
+      </div>
+    </div>
+    <div>
+      ${[['Categoria',p.cat],['Marca',p.brand],['Conectividade',p.net],['Armazenamento',p.storage],['Status',p.status]].map(([l,v])=>`<div class="info-row"><span class="info-label">${l}</span><span>${v}</span></div>`).join('')}
+    </div>
+    <button class="modal-cta" onclick="window.open('https://wa.me/5516996225495?text=Olá!%20Tenho%20interesse%20no%20aparelho:%20'+encodeURIComponent(p.name),'_blank')">Solicitar este aparelho</button>
+    <button class="modal-sec-cta" onclick="window.open('https://wa.me/5516996225495','_blank')">Falar com consultor · (16) 99622-5495</button>
+  `;
+  document.getElementById('modal').classList.add('open');
+}
+
+document.getElementById('modal-close').addEventListener('click', () => {
+  document.getElementById('modal').classList.remove('open');
+});
+document.getElementById('modal').addEventListener('click', function(e){
+  if(e.target === this) this.classList.remove('open');
+});
+
+document.getElementById('t10').addEventListener('click', () => {
+  mode = 10;
+  document.getElementById('t10').classList.add('active');
+  document.getElementById('t24').classList.remove('active');
+  renderCards();
+});
+document.getElementById('t24').addEventListener('click', () => {
+  mode = 24;
+  document.getElementById('t24').classList.add('active');
+  document.getElementById('t10').classList.remove('active');
+  renderCards();
+});
+
+document.querySelectorAll('[data-filter="cat"]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-filter="cat"]').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    filterCat = btn.dataset.val;
+    document.getElementById('section-label').textContent = filterCat === 'Todos' ? 'Todos os aparelhos' : btn.textContent;
+    renderCards();
+  });
+});
+
+document.querySelectorAll('[data-filter="brand"]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-filter="brand"]').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    filterBrand = btn.dataset.val;
+    renderCards();
+  });
+});
+
+document.getElementById('search').addEventListener('input', (e) => {
+  searchQ = e.target.value;
+  renderCards();
+});
+
+renderCards();
+</script>
